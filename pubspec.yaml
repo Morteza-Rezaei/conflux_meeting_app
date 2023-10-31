@@ -38,6 +38,8 @@ dependencies:
   google_fonts: ^6.1.0
   shared_preferences: ^2.2.2
   intl: ^0.18.1
+  syncfusion_flutter_calendar: ^23.1.43
+  uuid: ^4.1.0
 
 dev_dependencies:
   flutter_test:

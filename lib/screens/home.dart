@@ -41,17 +41,18 @@ class Home extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SuggestDateScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const SuggestDateScreen()),
                 );
               },
               icon: const Icon(Icons.calendar_today),
-              label: const Text('Toplantı Tarihleri Oluştur'),
+              label: const Text('Olası Toplantı Tarihleri Oluştur'),
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(
                   const EdgeInsets.symmetric(horizontal: 30),
                 ),
                 alignment: Alignment.centerLeft,
-                fixedSize: MaterialStateProperty.all(const Size(300, 60)),
+                fixedSize: MaterialStateProperty.all(const Size(350, 60)),
               ),
             ),
 
@@ -62,7 +63,8 @@ class Home extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SelectDateScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const SelectDateScreen()),
                 );
               },
               icon: const Icon(Icons.touch_app),
@@ -72,7 +74,7 @@ class Home extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 30),
                 ),
                 alignment: Alignment.centerLeft,
-                fixedSize: MaterialStateProperty.all(const Size(300, 60)),
+                fixedSize: MaterialStateProperty.all(const Size(350, 60)),
               ),
             ),
 
@@ -84,7 +86,7 @@ class Home extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CreateMeetingScreen()),
+                      builder: (context) => const CreateMeetingScreen()),
                 );
               },
               icon: const Icon(Icons.add),
@@ -94,7 +96,7 @@ class Home extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 30),
                 ),
                 alignment: Alignment.centerLeft,
-                fixedSize: MaterialStateProperty.all(const Size(300, 60)),
+                fixedSize: MaterialStateProperty.all(const Size(350, 60)),
               ),
             ),
           ],
