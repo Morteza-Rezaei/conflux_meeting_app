@@ -11,64 +11,132 @@ class SuggestDateScreen extends StatefulWidget {
 final formatter = DateFormat.yMd();
 
 class _SuggestDateScreenState extends State<SuggestDateScreen> {
-  DateTime? _selectedDate;
-  void _presentDatePicker() async {
-    final now = DateTime.now();
-    final firstDate = DateTime(now.year - 1, now.month, now.day);
-    final pickedDate = await showDatePicker(
-      context: context,
-      initialDate: now,
-      firstDate: firstDate,
-      lastDate: now,
-    );
-    setState(() {
-      _selectedDate = pickedDate;
-    });
-  }
+  final _formKey = GlobalKey<FormState>();
+
+  final List<String> participants = [];
+  final TextEditingController _dateController = TextEditingController();
+
+  var _mTitle = '';
+  var _mDescription = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Toplantı Tarihleri Oluştur'),
+        title: const Text('Olası toplantı oluştur'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            // toplantı konusu
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Toplantı Konusu',
-              ),
-            ),
-
-            // toplantı açıklaması
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Toplantı Açıklaması',
-              ),
-            ),
-
-            // toplantı için olası tarihler
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                Text(
-                  _selectedDate == null
-                      ? 'No date selected'
-                      : formatter.format(_selectedDate!),
+                // meeting title
+                TextFormField(
+                  decoration: const InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    labelText: 'Toplantı başlığı',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Lütfen toplantı başlığını giriniz';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    _mTitle = newValue!;
+                  },
                 ),
-                IconButton(
-                  onPressed: _presentDatePicker,
-                  icon: const Icon(Icons.calendar_month),
+
+                const SizedBox(height: 10),
+
+                // meeting description
+                TextFormField(
+                  maxLines: 2,
+                  decoration: const InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    labelText: 'Toplantı açıklaması',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Lütfen toplantı açıklamasını giriniz';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    _mDescription = newValue!;
+                  },
+                ),
+
+                const SizedBox(height: 10),
+
+                // to add participants to the meeting
+                TextField(
+                  controller: _dateController,
+                  decoration: const InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    labelText: 'katılımcılar',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                  ),
+                ),
+
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      participants.add(_dateController.text);
+                      _dateController.clear();
+                    });
+                  },
+                  child: const Text('katılımcı ekle'),
+                ),
+
+                Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.grey[300],
+                    ),
+                    height: 100,
+                    child: ListView.builder(
+                      itemCount: participants.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          tileColor: Colors.blue[300],
+                          dense: true,
+                          leading: const Icon(Icons.person),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 30),
+                          title: Text(participants[index]),
+                        );
+                      },
+                    )),
+
+                // submit button
+                ElevatedButton(
+                  onPressed: () {
+                    final isValid = _formKey.currentState!.validate();
+                    if (!isValid) {
+                      return;
+                    }
+                    _formKey.currentState!.save();
+                    debugPrint('$_mTitle, $_mDescription');
+                  },
+                  child: const Text('Olası toplantıyı göster'),
                 ),
               ],
             ),
-
-            // gönder butonu
-          ],
+          ),
         ),
       ),
     );
