@@ -104,20 +104,30 @@ class _SuggestDateScreenState extends State<SuggestDateScreen> {
 
                 Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(5),
                       color: Colors.grey[300],
                     ),
-                    height: 100,
+                    height: 200,
                     child: ListView.builder(
                       itemCount: participants.length,
                       itemBuilder: (context, index) {
-                        return ListTile(
-                          tileColor: Colors.blue[300],
-                          dense: true,
-                          leading: const Icon(Icons.person),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 30),
-                          title: Text(participants[index]),
+                        return Container(
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: Colors.grey[400],
+                          ),
+                          child: ListTile(
+                            title: Text(participants[index]),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                setState(() {
+                                  participants.removeAt(index);
+                                });
+                              },
+                            ),
+                          ),
                         );
                       },
                     )),
