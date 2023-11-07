@@ -1,7 +1,7 @@
 import 'package:conflux_meeting_app/screens/create_meeting.dart';
 import 'package:conflux_meeting_app/screens/select_date.dart';
 import 'package:conflux_meeting_app/screens/create_possible_meeting.dart';
-import 'package:conflux_meeting_app/screens/widgets/button.dart';
+import 'package:conflux_meeting_app/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

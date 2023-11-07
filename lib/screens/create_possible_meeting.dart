@@ -1,4 +1,4 @@
-import 'package:conflux_meeting_app/screens/widgets/styles.dart';
+import 'package:conflux_meeting_app/widgets/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -32,6 +32,35 @@ class _CreatePossibleMeetingScreenState
       appBar: AppBar(
         title: const Text('Olası toplantı oluştur'),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              onPressed: () {
+                final isValid = _formKey.currentState!.validate();
+                if (!isValid) {
+                  return;
+                }
+
+                if (participants.isEmpty || possibleMeetingDates.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Lütfen en az bir katılımcı ve bir tarih ekleyiniz')),
+                  );
+                  return;
+                }
+
+                _formKey.currentState!.save();
+
+                debugPrint(
+                    '$_mTitle, $_mDescription, $_mMeetingEnteringPassword, $participants, $possibleMeetingDates');
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.send_rounded),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -106,7 +135,7 @@ class _CreatePossibleMeetingScreenState
                           Row(
                             children: [
                               Expanded(
-                                child: ElevatedButton(
+                                child: ElevatedButton.icon(
                                   onPressed: () {
                                     showDialog(
                                       context: context,
@@ -129,13 +158,39 @@ class _CreatePossibleMeetingScreenState
                                             TextButton(
                                               child: const Text('Ekle'),
                                               onPressed: () {
-                                                setState(() {
-                                                  participants.add(
-                                                      _participantsController
-                                                          .text);
-                                                  _participantsController
-                                                      .clear();
-                                                });
+                                                if (_participantsController
+                                                    .text.isEmpty) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text(
+                                                          'Lütfen katılımcı adını giriniz'),
+                                                    ),
+                                                  );
+                                                }
+                                                if (participants.contains(
+                                                    _participantsController
+                                                        .text)) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text(
+                                                          'Bu katılımcı zaten ekli'),
+                                                    ),
+                                                  );
+                                                  return;
+                                                }
+                                                if (_participantsController
+                                                    .text.isNotEmpty) {
+                                                  setState(() {
+                                                    participants.add(
+                                                        _participantsController
+                                                            .text);
+                                                    _participantsController
+                                                        .clear();
+                                                  });
+                                                }
+
                                                 Navigator.of(context).pop();
                                               },
                                             ),
@@ -144,7 +199,16 @@ class _CreatePossibleMeetingScreenState
                                       },
                                     );
                                   },
-                                  child: const Text('Katılımcı ekle'),
+                                  icon: const Icon(
+                                    Icons.person_add,
+                                    size: 20,
+                                  ),
+                                  label: const Text(
+                                    'Katılımcı ekle',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -158,8 +222,8 @@ class _CreatePossibleMeetingScreenState
                                   .secondaryContainer
                                   .withOpacity(0.2),
                             ),
-                            height: 250,
                             child: ListView.builder(
+                              shrinkWrap: true,
                               itemCount: participants.length,
                               itemBuilder: (context, index) {
                                 return Container(
@@ -202,7 +266,7 @@ class _CreatePossibleMeetingScreenState
                           Row(
                             children: [
                               Expanded(
-                                child: ElevatedButton(
+                                child: ElevatedButton.icon(
                                   onPressed: () {
                                     showDatePicker(
                                       context: context,
@@ -234,8 +298,15 @@ class _CreatePossibleMeetingScreenState
                                       });
                                     });
                                   },
-                                  child: const Text(
+                                  icon: const Icon(
+                                    Icons.calendar_today,
+                                    size: 20,
+                                  ),
+                                  label: const Text(
                                     'olası tarhileri ekle',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -250,8 +321,8 @@ class _CreatePossibleMeetingScreenState
                                   .secondaryContainer
                                   .withOpacity(0.2),
                             ),
-                            height: 250,
                             child: ListView.builder(
+                              shrinkWrap: true,
                               itemCount: possibleMeetingDates.length,
                               itemBuilder: (context, index) {
                                 return Container(
@@ -293,34 +364,7 @@ class _CreatePossibleMeetingScreenState
                   ],
                 ),
 
-                // Olası toplantıyı oluştur
-                const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    final isValid = _formKey.currentState!.validate();
-                    if (!isValid) {
-                      return;
-                    }
-
-                    if (participants.isEmpty || possibleMeetingDates.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(
-                                'Lütfen en az bir katılımcı ve bir tarih ekleyiniz')),
-                      );
-                      return;
-                    }
-
-                    _formKey.currentState!.save();
-
-                    debugPrint(
-                        '$_mTitle, $_mDescription, $_mMeetingEnteringPassword, $participants, $possibleMeetingDates');
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Olası toplantıyı oluştur'),
-                ),
-
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
               ],
             ),
           ),
