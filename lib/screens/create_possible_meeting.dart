@@ -1,6 +1,8 @@
+import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/widgets/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CreatePossibleMeetingScreen extends StatefulWidget {
   const CreatePossibleMeetingScreen({super.key});
@@ -17,17 +19,19 @@ class _CreatePossibleMeetingScreenState
     extends State<CreatePossibleMeetingScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final List<String> participants = [];
+  // final List<String> participants = [];
   final TextEditingController _participantsController = TextEditingController();
 
-  final List<DateTime> possibleMeetingDates = [];
+  // final List<DateTime> possibleMeetingDates = [];
 
-  var _mTitle = '';
-  var _mDescription = '';
-  var _mMeetingEnteringPassword = '';
+  // var _mTitle = '';
+  // var _mDescription = '';
+  // var _mMeetingEnteringPassword = '';
 
   @override
   Widget build(BuildContext context) {
+    final meetingData = Provider.of<MeetingData>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Olası toplantı oluştur'),
@@ -42,7 +46,8 @@ class _CreatePossibleMeetingScreenState
                   return;
                 }
 
-                if (participants.isEmpty || possibleMeetingDates.isEmpty) {
+                if (meetingData.participants.isEmpty ||
+                    meetingData.possibleMeetingDates.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                         content: Text(
@@ -54,7 +59,7 @@ class _CreatePossibleMeetingScreenState
                 _formKey.currentState!.save();
 
                 debugPrint(
-                    '$_mTitle, $_mDescription, $_mMeetingEnteringPassword, $participants, $possibleMeetingDates');
+                    '${meetingData.mTitle} - ${meetingData.mDescription} - ${meetingData.mMeetingEnteringPassword} - ${meetingData.participants} - ${meetingData.possibleMeetingDates}');
                 Navigator.of(context).pop();
               },
               icon: const Icon(Icons.send_rounded),
@@ -82,7 +87,7 @@ class _CreatePossibleMeetingScreenState
                       return null;
                     },
                     onSaved: (newValue) {
-                      _mTitle = newValue!;
+                      meetingData.setMTitle(newValue!);
                     },
                   ),
                 ),
@@ -100,7 +105,7 @@ class _CreatePossibleMeetingScreenState
                     return null;
                   },
                   onSaved: (newValue) {
-                    _mDescription = newValue!;
+                    meetingData.setMDescription(newValue!);
                   },
                 ),
 
@@ -118,7 +123,7 @@ class _CreatePossibleMeetingScreenState
                       return null;
                     },
                     onSaved: (newValue) {
-                      _mMeetingEnteringPassword = newValue!;
+                      meetingData.setMMeetingEnteringPassword(newValue!);
                     },
                   ),
                 ),
@@ -168,9 +173,10 @@ class _CreatePossibleMeetingScreenState
                                                     ),
                                                   );
                                                 }
-                                                if (participants.contains(
-                                                    _participantsController
-                                                        .text)) {
+                                                if (meetingData.participants
+                                                    .contains(
+                                                        _participantsController
+                                                            .text)) {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
                                                     const SnackBar(
@@ -183,7 +189,7 @@ class _CreatePossibleMeetingScreenState
                                                 if (_participantsController
                                                     .text.isNotEmpty) {
                                                   setState(() {
-                                                    participants.add(
+                                                    meetingData.addParticipant(
                                                         _participantsController
                                                             .text);
                                                     _participantsController
@@ -224,7 +230,7 @@ class _CreatePossibleMeetingScreenState
                             ),
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: participants.length,
+                              itemCount: meetingData.participants.length,
                               itemBuilder: (context, index) {
                                 return Container(
                                   margin: const EdgeInsets.all(5),
@@ -241,12 +247,14 @@ class _CreatePossibleMeetingScreenState
                                       top: 0,
                                       bottom: 0,
                                     ),
-                                    title: Text(participants[index]),
+                                    title:
+                                        Text(meetingData.participants[index]),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.delete),
                                       onPressed: () {
                                         setState(() {
-                                          participants.removeAt(index);
+                                          meetingData.participants
+                                              .removeAt(index);
                                         });
                                       },
                                     ),
@@ -293,7 +301,8 @@ class _CreatePossibleMeetingScreenState
                                             pickedTime.hour,
                                             pickedTime.minute,
                                           );
-                                          possibleMeetingDates.add(dateTime);
+                                          meetingData
+                                              .addPossibleMeetingDate(dateTime);
                                         });
                                       });
                                     });
@@ -323,7 +332,8 @@ class _CreatePossibleMeetingScreenState
                             ),
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: possibleMeetingDates.length,
+                              itemCount:
+                                  meetingData.possibleMeetingDates.length,
                               itemBuilder: (context, index) {
                                 return Container(
                                   margin: const EdgeInsets.all(5),
@@ -341,15 +351,17 @@ class _CreatePossibleMeetingScreenState
                                       bottom: 0,
                                     ),
                                     dense: true,
-                                    title: Text(dateFormatter
-                                        .format(possibleMeetingDates[index])),
-                                    subtitle: Text(timeFormatter
-                                        .format(possibleMeetingDates[index])),
+                                    title: Text(dateFormatter.format(meetingData
+                                        .possibleMeetingDates[index])),
+                                    subtitle: Text(timeFormatter.format(
+                                        meetingData
+                                            .possibleMeetingDates[index])),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.delete),
                                       onPressed: () {
                                         setState(() {
-                                          possibleMeetingDates.removeAt(index);
+                                          meetingData.possibleMeetingDates
+                                              .removeAt(index);
                                         });
                                       },
                                     ),
