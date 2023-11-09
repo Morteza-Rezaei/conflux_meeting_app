@@ -1,6 +1,23 @@
 import 'package:flutter/foundation.dart';
 
+class Meeting {
+  String mTitle;
+  String mDescription;
+  String mMeetingEnteringPassword;
+  List<String> participants;
+  List<DateTime> possibleMeetingDates;
+
+  Meeting({
+    required this.mTitle,
+    required this.mDescription,
+    required this.mMeetingEnteringPassword,
+    required this.participants,
+    required this.possibleMeetingDates,
+  });
+}
+
 class MeetingData extends ChangeNotifier {
+  List<Meeting> meetings = [];
   List<String> _participants = [];
   List<DateTime> _possibleMeetingDates = [];
   String _mTitle = '';
@@ -35,6 +52,20 @@ class MeetingData extends ChangeNotifier {
 
   void setMMeetingEnteringPassword(String password) {
     _mMeetingEnteringPassword = password;
+    notifyListeners();
+  }
+
+  void clear() {
+    _participants = [];
+    _possibleMeetingDates = [];
+    _mTitle = '';
+    _mDescription = '';
+    _mMeetingEnteringPassword = '';
+    notifyListeners();
+  }
+
+  void addMeeting(Meeting meeting) {
+    meetings.add(meeting);
     notifyListeners();
   }
 }

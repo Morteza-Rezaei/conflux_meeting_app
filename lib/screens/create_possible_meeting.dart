@@ -18,15 +18,7 @@ final timeFormatter = DateFormat.jm();
 class _CreatePossibleMeetingScreenState
     extends State<CreatePossibleMeetingScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  // final List<String> participants = [];
   final TextEditingController _participantsController = TextEditingController();
-
-  // final List<DateTime> possibleMeetingDates = [];
-
-  // var _mTitle = '';
-  // var _mDescription = '';
-  // var _mMeetingEnteringPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +50,19 @@ class _CreatePossibleMeetingScreenState
 
                 _formKey.currentState!.save();
 
-                debugPrint(
-                    '${meetingData.mTitle} - ${meetingData.mDescription} - ${meetingData.mMeetingEnteringPassword} - ${meetingData.participants} - ${meetingData.possibleMeetingDates}');
+                Meeting newMeeting = Meeting(
+                  mTitle: meetingData.mTitle,
+                  mDescription: meetingData.mDescription,
+                  mMeetingEnteringPassword:
+                      meetingData.mMeetingEnteringPassword,
+                  participants: meetingData.participants,
+                  possibleMeetingDates: meetingData.possibleMeetingDates,
+                );
+
+                meetingData.addMeeting(newMeeting);
+
+                meetingData.clear();
+
                 Navigator.of(context).pop();
               },
               icon: const Icon(Icons.send_rounded),

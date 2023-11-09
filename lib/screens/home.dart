@@ -1,5 +1,5 @@
 import 'package:conflux_meeting_app/screens/create_meeting.dart';
-import 'package:conflux_meeting_app/screens/select_date.dart';
+import 'package:conflux_meeting_app/screens/select_date/list_possible_meeting.dart';
 import 'package:conflux_meeting_app/screens/create_possible_meeting.dart';
 import 'package:conflux_meeting_app/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,6 @@ class Home extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // btn Toplantı Tarihleri Oluştur
               MyHomeElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -57,7 +56,8 @@ class Home extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const SelectDateScreen()),
+                        builder: (context) =>
+                            const ListPossibleMeetingScreen()),
                   );
                 },
                 icon: const Icon(Icons.touch_app),
