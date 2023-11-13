@@ -18,8 +18,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
   final List<String> participants = [];
   final TextEditingController _participantsController = TextEditingController();
 
-  // ignore: avoid_init_to_null
-  DateTime? meetingDate = null;
+  DateTime? meetingDate;
 
   var _mTitle = '';
   var _mDescription = '';

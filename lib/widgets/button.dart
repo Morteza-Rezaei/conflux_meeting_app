@@ -24,7 +24,7 @@ class MyHomeElevatedButton extends StatelessWidget {
           padding: MaterialStateProperty.all(
             const EdgeInsets.symmetric(horizontal: 30),
           ),
-          alignment: Alignment.center,
+          alignment: Alignment.centerLeft,
           fixedSize: MaterialStateProperty.all(const Size(300, 80)),
         ),
       ),
