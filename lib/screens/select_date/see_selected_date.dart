@@ -1,41 +1,39 @@
 import 'package:conflux_meeting_app/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SeeSelectedDateScreen extends StatelessWidget {
-  final List<DateTime>? selectedDates;
-  const SeeSelectedDateScreen({
-    super.key,
-    required this.selectedMeeting,
-    this.selectedDates,
-  });
-
-  final Meeting selectedMeeting;
+  const SeeSelectedDateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final username =
-        Provider.of<UsernameProvider>(context, listen: false).username;
-    final userSelectedDates = Provider.of<UserMeetingDatesProvider>(context);
-    final dates = userSelectedDates.getDates(username);
+    final dateFormatter = DateFormat.yMd();
+
+    final userMeetingDates = Provider.of<UserMeetingDatesProvider>(context);
+    Map<String, List<DateTime>> allUserDates = userMeetingDates.userDates;
+
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: AppBar(
+        title: const Text('Seçilen Tarihler'),
+      ),
+      body: ListView.builder(
+        itemCount: allUserDates.keys.length,
+        itemBuilder: (context, index) {
+          String username = allUserDates.keys.elementAt(index);
+          List<DateTime> dates = allUserDates[username]!;
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ListView.builder(
-                  itemCount: dates?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final date = dates![index];
-                    return ListTile(
-                      title: Text(date.toString()),
-                    );
-                  }),
+              Text(username),
+              Column(
+                children: dates
+                    .map((date) => Text(dateFormatter.format(date)))
+                    .toList(),
+              ),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }

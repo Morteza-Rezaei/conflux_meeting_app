@@ -9,13 +9,16 @@ class AuthScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final Meeting selectedMeeting;
 
-  AuthScreen({super.key, required this.selectedMeeting});
+  AuthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final possibleMeetingData = Provider.of<MeetingData>(context);
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Katılımcı Girişi'),
+      ),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -58,9 +61,9 @@ class AuthScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    if (selectedMeeting.participants
+                    if (possibleMeetingData.participants
                             .contains(_usernameController.text) &&
-                        selectedMeeting.mMeetingEnteringPassword ==
+                        possibleMeetingData.mMeetingEnteringPassword ==
                             _passwordController.text) {
                       // kullanıcı adını kaydetme
                       Provider.of<UsernameProvider>(context, listen: false)
@@ -72,9 +75,7 @@ class AuthScreen extends StatelessWidget {
 
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => SelectSectionScreen(
-                            selectedMeeting: selectedMeeting,
-                          ),
+                          builder: (context) => const SelectSectionScreen(),
                         ),
                       );
 

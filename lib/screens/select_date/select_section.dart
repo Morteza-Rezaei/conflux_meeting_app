@@ -3,15 +3,20 @@ import 'package:conflux_meeting_app/screens/select_date/see_selected_date.dart';
 import 'package:conflux_meeting_app/screens/select_date/select_meeting_date.dart';
 import 'package:conflux_meeting_app/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SelectSectionScreen extends StatelessWidget {
-  const SelectSectionScreen({super.key, required this.selectedMeeting});
-
-  final Meeting selectedMeeting;
+  const SelectSectionScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final possibleMeetingData = Provider.of<MeetingData>(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(possibleMeetingData.mTitle),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -21,9 +26,7 @@ class SelectSectionScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => SelectMeetingDateScreen(
-                            selectedMeeting: selectedMeeting,
-                          )),
+                      builder: (context) => const SelectMeetingDateScreen()),
                 );
               },
               icon: const Icon(Icons.calendar_today),
@@ -35,9 +38,7 @@ class SelectSectionScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => SeeSelectedDateScreen(
-                            selectedMeeting: selectedMeeting,
-                          )),
+                      builder: (context) => const SeeSelectedDateScreen()),
                 );
               },
               icon: const Icon(Icons.calendar_today),

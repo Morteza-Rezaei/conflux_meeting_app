@@ -1,23 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class Meeting {
-  String mTitle;
-  String mDescription;
-  String mMeetingEnteringPassword;
-  List<String> participants;
-  List<DateTime> possibleMeetingDates;
-
-  Meeting({
-    required this.mTitle,
-    required this.mDescription,
-    required this.mMeetingEnteringPassword,
-    required this.participants,
-    required this.possibleMeetingDates,
-  });
-}
-
 class MeetingData extends ChangeNotifier {
-  List<Meeting> meetings = [];
   List<String> _participants = [];
   List<DateTime> _possibleMeetingDates = [];
   String _mTitle = '';
@@ -54,20 +37,6 @@ class MeetingData extends ChangeNotifier {
     _mMeetingEnteringPassword = password;
     notifyListeners();
   }
-
-  void clear() {
-    _participants = [];
-    _possibleMeetingDates = [];
-    _mTitle = '';
-    _mDescription = '';
-    _mMeetingEnteringPassword = '';
-    notifyListeners();
-  }
-
-  void addMeeting(Meeting meeting) {
-    meetings.add(meeting);
-    notifyListeners();
-  }
 }
 
 class UsernameProvider extends ChangeNotifier {
@@ -87,19 +56,17 @@ class UsernameProvider extends ChangeNotifier {
 }
 
 class UserMeetingDatesProvider extends ChangeNotifier {
-  Map<String, List<DateTime>> userDates = {};
+  Map<String, List<DateTime>> _userDates = {};
+
+  Map<String, List<DateTime>> get userDates => _userDates;
 
   void addDates(String username, List<DateTime> dates) {
-    if (!userDates.containsKey(username)) {
-      userDates[username] = [];
+    if (!_userDates.containsKey(username)) {
+      _userDates[username] = [];
     } else {
-      userDates[username]!.clear();
+      _userDates[username]!.clear();
     }
-    userDates[username]!.addAll(dates);
+    _userDates[username]!.addAll(dates);
     notifyListeners();
-  }
-
-  List<DateTime>? getDates(String username) {
-    return userDates[username];
   }
 }

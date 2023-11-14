@@ -1,5 +1,5 @@
 import 'package:conflux_meeting_app/screens/create_meeting.dart';
-import 'package:conflux_meeting_app/screens/select_date/list_possible_meeting.dart';
+import 'package:conflux_meeting_app/screens/select_date/auth.dart';
 import 'package:conflux_meeting_app/screens/create_possible_meeting.dart';
 import 'package:conflux_meeting_app/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -55,9 +55,7 @@ class Home extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const ListPossibleMeetingScreen()),
+                    MaterialPageRoute(builder: (context) => AuthScreen()),
                   );
                 },
                 icon: const Icon(Icons.touch_app),

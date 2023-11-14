@@ -5,8 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SelectMeetingDateScreen extends StatefulWidget {
-  final Meeting selectedMeeting;
-  const SelectMeetingDateScreen({super.key, required this.selectedMeeting});
+  const SelectMeetingDateScreen({
+    super.key,
+  });
 
   @override
   State<SelectMeetingDateScreen> createState() =>
@@ -18,20 +19,32 @@ final timeFormatter = DateFormat.jm();
 
 class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
   DateTime? meetingDateSelectedFromUser;
-
   List<bool> _selectedDates = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedDates = List.generate(
-        widget.selectedMeeting.possibleMeetingDates.length, (index) => false);
+    final possibleMeetingData =
+        Provider.of<MeetingData>(context, listen: false);
+    _selectedDates = List.filled(
+      possibleMeetingData.possibleMeetingDates.length,
+      false,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final possibleMeetingData = Provider.of<MeetingData>(context);
     final username = Provider.of<UsernameProvider>(context);
     final userMeetingDates = Provider.of<UserMeetingDatesProvider>(context);
+
+    initState() {
+      super.initState();
+      _selectedDates = List.filled(
+        possibleMeetingData.possibleMeetingDates.length,
+        false,
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +76,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
 
                 for (int i = 0; i < _selectedDates.length; i++) {
                   if (_selectedDates[i]) {
-                    dates.add(widget.selectedMeeting.possibleMeetingDates[i]);
+                    dates.add(possibleMeetingData.possibleMeetingDates[i]);
                   }
                 }
 
@@ -93,9 +106,9 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                 ),
                 child: Column(
                   children: [
-                    // oluşan toplantı başlığı
+                    // olası toplantı başlığı
                     Text(
-                      widget.selectedMeeting.mTitle,
+                      possibleMeetingData.mTitle,
                       style: GoogleFonts.montserrat(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -110,7 +123,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                       height: 80,
                       child: SingleChildScrollView(
                         child: Text(
-                          widget.selectedMeeting.mDescription,
+                          possibleMeetingData.mDescription,
                           style: GoogleFonts.montserrat(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -149,7 +162,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        widget.selectedMeeting.participants.join(', '),
+                        possibleMeetingData.participants.join(', '),
                         style: GoogleFonts.montserrat(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -186,16 +199,16 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                     const SizedBox(height: 10),
                     // lütfen size uygun olan tarihleri seçiniz yazısı
                     for (var meeting
-                        in widget.selectedMeeting.possibleMeetingDates)
+                        in possibleMeetingData.possibleMeetingDates)
                       CheckboxListTile(
                         title: Text(meeting.toString()),
-                        value: _selectedDates[widget
-                            .selectedMeeting.possibleMeetingDates
+                        value: _selectedDates[possibleMeetingData
+                            .possibleMeetingDates
                             .indexOf(meeting)],
                         onChanged: (bool? value) {
                           setState(() {
-                            _selectedDates[widget
-                                .selectedMeeting.possibleMeetingDates
+                            _selectedDates[possibleMeetingData
+                                .possibleMeetingDates
                                 .indexOf(meeting)] = value!;
                           });
                         },

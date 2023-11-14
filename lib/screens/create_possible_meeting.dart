@@ -22,7 +22,7 @@ class _CreatePossibleMeetingScreenState
 
   @override
   Widget build(BuildContext context) {
-    final meetingData = Provider.of<MeetingData>(context);
+    final possibleMeetingData = Provider.of<MeetingData>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -38,8 +38,8 @@ class _CreatePossibleMeetingScreenState
                   return;
                 }
 
-                if (meetingData.participants.isEmpty ||
-                    meetingData.possibleMeetingDates.isEmpty) {
+                if (possibleMeetingData.participants.isEmpty ||
+                    possibleMeetingData.possibleMeetingDates.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                         content: Text(
@@ -50,18 +50,11 @@ class _CreatePossibleMeetingScreenState
 
                 _formKey.currentState!.save();
 
-                Meeting newMeeting = Meeting(
-                  mTitle: meetingData.mTitle,
-                  mDescription: meetingData.mDescription,
-                  mMeetingEnteringPassword:
-                      meetingData.mMeetingEnteringPassword,
-                  participants: meetingData.participants,
-                  possibleMeetingDates: meetingData.possibleMeetingDates,
-                );
-
-                meetingData.addMeeting(newMeeting);
-
-                meetingData.clear();
+                print(possibleMeetingData.mTitle);
+                print(possibleMeetingData.mDescription);
+                print(possibleMeetingData.mMeetingEnteringPassword);
+                print(possibleMeetingData.participants);
+                print(possibleMeetingData.possibleMeetingDates);
 
                 Navigator.of(context).pop();
               },
@@ -90,7 +83,7 @@ class _CreatePossibleMeetingScreenState
                       return null;
                     },
                     onSaved: (newValue) {
-                      meetingData.setMTitle(newValue!);
+                      possibleMeetingData.setMTitle(newValue!);
                     },
                   ),
                 ),
@@ -108,7 +101,7 @@ class _CreatePossibleMeetingScreenState
                     return null;
                   },
                   onSaved: (newValue) {
-                    meetingData.setMDescription(newValue!);
+                    possibleMeetingData.setMDescription(newValue!);
                   },
                 ),
 
@@ -126,7 +119,8 @@ class _CreatePossibleMeetingScreenState
                       return null;
                     },
                     onSaved: (newValue) {
-                      meetingData.setMMeetingEnteringPassword(newValue!);
+                      possibleMeetingData
+                          .setMMeetingEnteringPassword(newValue!);
                     },
                   ),
                 ),
@@ -176,7 +170,8 @@ class _CreatePossibleMeetingScreenState
                                                     ),
                                                   );
                                                 }
-                                                if (meetingData.participants
+                                                if (possibleMeetingData
+                                                    .participants
                                                     .contains(
                                                         _participantsController
                                                             .text)) {
@@ -192,9 +187,10 @@ class _CreatePossibleMeetingScreenState
                                                 if (_participantsController
                                                     .text.isNotEmpty) {
                                                   setState(() {
-                                                    meetingData.addParticipant(
-                                                        _participantsController
-                                                            .text);
+                                                    possibleMeetingData
+                                                        .addParticipant(
+                                                            _participantsController
+                                                                .text);
                                                     _participantsController
                                                         .clear();
                                                   });
@@ -233,7 +229,8 @@ class _CreatePossibleMeetingScreenState
                             ),
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: meetingData.participants.length,
+                              itemCount:
+                                  possibleMeetingData.participants.length,
                               itemBuilder: (context, index) {
                                 return Container(
                                   margin: const EdgeInsets.all(5),
@@ -250,13 +247,13 @@ class _CreatePossibleMeetingScreenState
                                       top: 0,
                                       bottom: 0,
                                     ),
-                                    title:
-                                        Text(meetingData.participants[index]),
+                                    title: Text(possibleMeetingData
+                                        .participants[index]),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.delete),
                                       onPressed: () {
                                         setState(() {
-                                          meetingData.participants
+                                          possibleMeetingData.participants
                                               .removeAt(index);
                                         });
                                       },
@@ -304,7 +301,7 @@ class _CreatePossibleMeetingScreenState
                                             pickedTime.hour,
                                             pickedTime.minute,
                                           );
-                                          meetingData
+                                          possibleMeetingData
                                               .addPossibleMeetingDate(dateTime);
                                         });
                                       });
@@ -335,8 +332,8 @@ class _CreatePossibleMeetingScreenState
                             ),
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount:
-                                  meetingData.possibleMeetingDates.length,
+                              itemCount: possibleMeetingData
+                                  .possibleMeetingDates.length,
                               itemBuilder: (context, index) {
                                 return Container(
                                   margin: const EdgeInsets.all(5),
@@ -354,16 +351,18 @@ class _CreatePossibleMeetingScreenState
                                       bottom: 0,
                                     ),
                                     dense: true,
-                                    title: Text(dateFormatter.format(meetingData
-                                        .possibleMeetingDates[index])),
+                                    title: Text(dateFormatter.format(
+                                        possibleMeetingData
+                                            .possibleMeetingDates[index])),
                                     subtitle: Text(timeFormatter.format(
-                                        meetingData
+                                        possibleMeetingData
                                             .possibleMeetingDates[index])),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.delete),
                                       onPressed: () {
                                         setState(() {
-                                          meetingData.possibleMeetingDates
+                                          possibleMeetingData
+                                              .possibleMeetingDates
                                               .removeAt(index);
                                         });
                                       },
