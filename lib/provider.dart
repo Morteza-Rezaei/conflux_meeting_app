@@ -69,3 +69,37 @@ class MeetingData extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+class UsernameProvider extends ChangeNotifier {
+  String _username = '';
+
+  String get username => _username;
+
+  void setUsername(String username) {
+    _username = username;
+    notifyListeners();
+  }
+
+  void clear() {
+    _username = '';
+    notifyListeners();
+  }
+}
+
+class UserMeetingDatesProvider extends ChangeNotifier {
+  Map<String, List<DateTime>> userDates = {};
+
+  void addDates(String username, List<DateTime> dates) {
+    if (!userDates.containsKey(username)) {
+      userDates[username] = [];
+    } else {
+      userDates[username]!.clear();
+    }
+    userDates[username]!.addAll(dates);
+    notifyListeners();
+  }
+
+  List<DateTime>? getDates(String username) {
+    return userDates[username];
+  }
+}

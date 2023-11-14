@@ -2,6 +2,7 @@ import 'package:conflux_meeting_app/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class SelectMeetingDateScreen extends StatefulWidget {
   final Meeting selectedMeeting;
@@ -29,6 +30,9 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final username = Provider.of<UsernameProvider>(context);
+    final userMeetingDates = Provider.of<UserMeetingDatesProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Olası toplantı bilgileri'),
@@ -38,7 +42,34 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
               onPressed: () {
-                // seçilen tarihleri kaydet
+                if (meetingDateSelectedFromUser == null &&
+                    !_selectedDates.contains(true)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Lütfen bir tarih seçiniz',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                  return;
+                }
+
+                List<DateTime> dates = [];
+
+                if (meetingDateSelectedFromUser != null) {
+                  dates.add(meetingDateSelectedFromUser!);
+                }
+
+                for (int i = 0; i < _selectedDates.length; i++) {
+                  if (_selectedDates[i]) {
+                    dates.add(widget.selectedMeeting.possibleMeetingDates[i]);
+                  }
+                }
+
+                userMeetingDates.addDates(username.username, dates);
+
+                print(userMeetingDates.userDates);
               },
               icon: const Icon(Icons.send_rounded),
             ),

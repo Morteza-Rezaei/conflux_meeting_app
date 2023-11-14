@@ -14,8 +14,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MeetingData(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => MeetingData()),
+        ChangeNotifierProvider(create: (context) => UsernameProvider()),
+        ChangeNotifierProvider(create: (context) => UserMeetingDatesProvider())
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),

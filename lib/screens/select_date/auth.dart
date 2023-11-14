@@ -3,6 +3,7 @@ import 'package:conflux_meeting_app/screens/select_date/select_section.dart';
 import 'package:conflux_meeting_app/widgets/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class AuthScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -61,6 +62,14 @@ class AuthScreen extends StatelessWidget {
                             .contains(_usernameController.text) &&
                         selectedMeeting.mMeetingEnteringPassword ==
                             _passwordController.text) {
+                      // kullanıcı adını kaydetme
+                      Provider.of<UsernameProvider>(context, listen: false)
+                          .setUsername(_usernameController.text);
+
+                      final username =
+                          Provider.of<UsernameProvider>(context, listen: false)
+                              .username;
+
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => SelectSectionScreen(
@@ -68,6 +77,8 @@ class AuthScreen extends StatelessWidget {
                           ),
                         ),
                       );
+
+                      debugPrint('username: $username');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
