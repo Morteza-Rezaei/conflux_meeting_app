@@ -50,12 +50,6 @@ class _CreatePossibleMeetingScreenState
 
                 _formKey.currentState!.save();
 
-                print(possibleMeetingData.mTitle);
-                print(possibleMeetingData.mDescription);
-                print(possibleMeetingData.mMeetingEnteringPassword);
-                print(possibleMeetingData.participants);
-                print(possibleMeetingData.possibleMeetingDates);
-
                 Navigator.of(context).pop();
               },
               icon: const Icon(Icons.send_rounded),
