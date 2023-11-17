@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/widgets/styles.dart';
+import 'package:conflux_meeting_app/widgets/text_and_textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -69,27 +70,76 @@ class _CreatePossibleMeetingScreenState
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text('Meeting Details'),
-                      content: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Title: ${possibleMeetingData.mTitle}'),
-                          Text(
-                              'Description: ${possibleMeetingData.mDescription}'),
-                          Text('Password: $password'),
-                        ],
+                      contentPadding: const EdgeInsets.all(10),
+                      title: const Text('Toplantı oluşturulacak'),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
+                                    .withOpacity(1),
+                              ),
+                              child: ConfirmationMeetingRow(
+                                icon: Icons.event_rounded,
+                                title: 'Başlık:  ',
+                                text: possibleMeetingData.mTitle,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
+                                    .withOpacity(1),
+                              ),
+                              child: ConfirmationMeetingRow(
+                                icon: Icons.description_rounded,
+                                title: 'Açıklama:  ',
+                                text: possibleMeetingData.mDescription,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
+                                    .withOpacity(1),
+                              ),
+                              child: ConfirmationMeetingRow(
+                                icon: Icons.key_rounded,
+                                title: 'Şifre:  ',
+                                text: possibleMeetingData
+                                    .mMeetingEnteringPassword,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       actions: [
                         ElevatedButton(
-                          child: const Text('Cancel'),
+                          child: const Text('iptal'),
                           onPressed: () {
-                            _formKey.currentState!.reset();
                             possibleMeetingData.clear();
                             Navigator.of(context).pop();
                           },
                         ),
                         ElevatedButton(
-                          child: const Text('OK'),
+                          child: const Text('tamam'),
                           onPressed: () {
                             _formKey.currentState!.save();
                             Navigator.of(context).pop();
@@ -150,26 +200,6 @@ class _CreatePossibleMeetingScreenState
                 ),
 
                 const SizedBox(height: 15),
-
-                // Parola ekle
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 30),
-                //   child: TextFormField(
-                //     decoration: myInputDecoration('Toplantı parolası'),
-                //     validator: (value) {
-                //       if (value == null || value.isEmpty) {
-                //         return 'Lütfen toplantı giriş şifresini giriniz';
-                //       }
-                //       return null;
-                //     },
-                //     onSaved: (newValue) {
-                //       possibleMeetingData
-                //           .setMMeetingEnteringPassword(newValue!);
-                //     },
-                //   ),
-                // ),
-
-                const SizedBox(height: 30),
 
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

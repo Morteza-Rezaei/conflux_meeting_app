@@ -36,10 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   google_fonts: ^6.1.0
-  shared_preferences: ^2.2.2
   intl: ^0.18.1
-  syncfusion_flutter_calendar: ^23.1.43
-  uuid: ^4.1.0
   provider: ^6.0.5
 
 dev_dependencies:
