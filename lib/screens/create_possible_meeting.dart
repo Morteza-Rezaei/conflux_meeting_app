@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/widgets/styles.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,18 @@ class _CreatePossibleMeetingScreenState
     extends State<CreatePossibleMeetingScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _participantsController = TextEditingController();
+
+  String _generatePassword() {
+    const allowedChars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const passwordLength = 4;
+    final random = Random(DateTime.now().millisecondsSinceEpoch);
+    final password = List.generate(passwordLength, (index) {
+      int randIndex = random.nextInt(allowedChars.length);
+      return allowedChars[randIndex];
+    }).join();
+    return password;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +62,45 @@ class _CreatePossibleMeetingScreenState
                   return;
                 }
 
-                _formKey.currentState!.save();
+                String password = _generatePassword();
+                possibleMeetingData.setMMeetingEnteringPassword(password);
 
-                Navigator.of(context).pop();
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Meeting Details'),
+                      content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Title: ${possibleMeetingData.mTitle}'),
+                          Text(
+                              'Description: ${possibleMeetingData.mDescription}'),
+                          Text('Password: $password'),
+                        ],
+                      ),
+                      actions: [
+                        ElevatedButton(
+                          child: const Text('Cancel'),
+                          onPressed: () {
+                            _formKey.currentState!.reset();
+                            possibleMeetingData.clear();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        ElevatedButton(
+                          child: const Text('OK'),
+                          onPressed: () {
+                            _formKey.currentState!.save();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ).then((_) {
+                  Navigator.of(context).pop();
+                });
               },
               icon: const Icon(Icons.send_rounded),
             ),
@@ -102,22 +152,22 @@ class _CreatePossibleMeetingScreenState
                 const SizedBox(height: 15),
 
                 // Parola ekle
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextFormField(
-                    decoration: myInputDecoration('Toplantı parolası'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Lütfen toplantı giriş şifresini giriniz';
-                      }
-                      return null;
-                    },
-                    onSaved: (newValue) {
-                      possibleMeetingData
-                          .setMMeetingEnteringPassword(newValue!);
-                    },
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 30),
+                //   child: TextFormField(
+                //     decoration: myInputDecoration('Toplantı parolası'),
+                //     validator: (value) {
+                //       if (value == null || value.isEmpty) {
+                //         return 'Lütfen toplantı giriş şifresini giriniz';
+                //       }
+                //       return null;
+                //     },
+                //     onSaved: (newValue) {
+                //       possibleMeetingData
+                //           .setMMeetingEnteringPassword(newValue!);
+                //     },
+                //   ),
+                // ),
 
                 const SizedBox(height: 30),
 

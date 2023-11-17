@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'color_schemes.g.dart';
 import 'package:provider/provider.dart';
 
-todo : olası toplantı oluştur sayfasında kullancılar ve şifre girişi silinecek ve yerinde uygulama random şifre oluşturacak
-
 void main() {
   runApp(const MyApp());
 }

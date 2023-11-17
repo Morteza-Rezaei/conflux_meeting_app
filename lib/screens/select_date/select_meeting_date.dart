@@ -38,14 +38,6 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
     final username = Provider.of<UsernameProvider>(context);
     final userMeetingDates = Provider.of<UserMeetingDatesProvider>(context);
 
-    initState() {
-      super.initState();
-      _selectedDates = List.filled(
-        possibleMeetingData.possibleMeetingDates.length,
-        false,
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Olası toplantı bilgileri'),
@@ -81,8 +73,6 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                 }
 
                 userMeetingDates.addDates(username.username, dates);
-
-                print(userMeetingDates.userDates);
               },
               icon: const Icon(Icons.send_rounded),
             ),

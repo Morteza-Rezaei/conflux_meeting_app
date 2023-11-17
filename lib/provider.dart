@@ -37,6 +37,15 @@ class MeetingData extends ChangeNotifier {
     _mMeetingEnteringPassword = password;
     notifyListeners();
   }
+
+  void clear() {
+    _participants.clear();
+    _possibleMeetingDates.clear();
+    _mTitle = '';
+    _mDescription = '';
+    _mMeetingEnteringPassword = '';
+    notifyListeners();
+  }
 }
 
 class UsernameProvider extends ChangeNotifier {
