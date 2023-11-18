@@ -14,7 +14,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final possibleMeetingData = Provider.of<MeetingData>(context);
+    final possibleMeetingData = Provider.of<PossibleMeetingData>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Katılımcı Girişi'),

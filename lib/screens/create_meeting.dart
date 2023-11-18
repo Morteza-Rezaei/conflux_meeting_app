@@ -1,6 +1,8 @@
+import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/widgets/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CreateMeetingScreen extends StatefulWidget {
   const CreateMeetingScreen({super.key});
@@ -14,24 +16,19 @@ final timeFormatter = DateFormat.jm();
 
 class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  final List<String> participants = [];
   final TextEditingController _participantsController = TextEditingController();
-
-  DateTime? meetingDate;
-
-  var _mTitle = '';
-  var _mDescription = '';
-  var _mMeetingEnteringPassword = '';
 
   @override
   Widget build(BuildContext context) {
+    final newMeetingData = Provider.of<NewMeetingData>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Toplantı Oluştur'),
         centerTitle: true,
         actions: [
           Padding(
+            ...
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
               icon: const Icon(Icons.send_rounded),
@@ -41,19 +38,17 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                   return;
                 }
 
-                if (participants.isEmpty || meetingDate == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text(
-                            'Lütfen en az bir katılımcı ve bir tarih ekleyiniz')),
-                  );
-                  return;
-                }
+                // if (participants.isEmpty || meetingDate == null) {
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     const SnackBar(
+                //         content: Text(
+                //             'Lütfen en az bir katılımcı ve bir tarih ekleyiniz')),
+                //   );
+                //   return;
+                // }
 
                 _formKey.currentState!.save();
 
-                debugPrint(
-                    '$_mTitle, $_mDescription, $_mMeetingEnteringPassword, $participants, $meetingDate');
                 Navigator.of(context).pop();
               },
             ),
@@ -80,7 +75,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                       return null;
                     },
                     onSaved: (newValue) {
-                      _mTitle = newValue!;
+                      newMeetingData.setMTitle(newValue!);
                     },
                   ),
                 ),
@@ -98,30 +93,11 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                     return null;
                   },
                   onSaved: (newValue) {
-                    _mDescription = newValue!;
+                    newMeetingData.setMDescription(newValue!);
                   },
                 ),
 
                 const SizedBox(height: 15),
-
-                // Parola ekle
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextFormField(
-                    decoration: myInputDecoration('Toplantı parolası'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Lütfen toplantı giriş şifresini giriniz';
-                      }
-                      return null;
-                    },
-                    onSaved: (newValue) {
-                      _mMeetingEnteringPassword = newValue!;
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 30),
 
                 // tarih ve zamanı ekle
                 ElevatedButton.icon(
@@ -150,7 +126,16 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                             pickedTime.hour,
                             pickedTime.minute,
                           );
-                          meetingDate = dateTime;
+                          if (newMeetingData.possibleMeetingDates
+                              .contains(dateTime)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Bu Tarih zaten ekli'),
+                              ),
+                            );
+                            return;
+                          }
+                          newMeetingData.addPossibleMeetingDate(dateTime);
                         });
                       });
                     });
@@ -170,9 +155,17 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                         .secondaryContainer
                         .withOpacity(0.2),
                   ),
-                  width: 300,
-                  child: meetingDate != null
-                      ? ListTile(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: newMeetingData.possibleMeetingDates.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                        ),
+                        child: ListTile(
                           contentPadding: const EdgeInsets.only(
                             left: 10,
                             right: 0,
@@ -180,18 +173,23 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                             bottom: 0,
                           ),
                           dense: true,
-                          title: Text(dateFormatter.format(meetingDate!)),
-                          subtitle: Text(timeFormatter.format(meetingDate!)),
+                          title: Text(dateFormatter.format(
+                              newMeetingData.possibleMeetingDates[index])),
+                          subtitle: Text(timeFormatter.format(
+                              newMeetingData.possibleMeetingDates[index])),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () {
                               setState(() {
-                                meetingDate = null;
+                                newMeetingData.possibleMeetingDates
+                                    .removeAt(index);
                               });
                             },
                           ),
-                        )
-                      : Container(),
+                        ),
+                      );
+                    },
+                  ),
                 ),
 
                 const SizedBox(height: 15),
@@ -228,7 +226,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                                     ),
                                   );
                                 }
-                                if (participants
+                                if (newMeetingData.participants
                                     .contains(_participantsController.text)) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -239,7 +237,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                                 }
                                 if (_participantsController.text.isNotEmpty) {
                                   setState(() {
-                                    participants
+                                    newMeetingData.participants
                                         .add(_participantsController.text);
                                     _participantsController.clear();
                                   });
@@ -268,7 +266,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                   width: 300,
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: participants.length,
+                    itemCount: newMeetingData.participants.length,
                     itemBuilder: (context, index) {
                       return Container(
                         margin: const EdgeInsets.all(5),
@@ -284,12 +282,12 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                             top: 0,
                             bottom: 0,
                           ),
-                          title: Text(participants[index]),
+                          title: Text(newMeetingData.participants[index]),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () {
                               setState(() {
-                                participants.removeAt(index);
+                                newMeetingData.participants.removeAt(index);
                               });
                             },
                           ),

@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/widgets/styles.dart';
 import 'package:conflux_meeting_app/widgets/text_and_textfields.dart';
+import 'package:conflux_meeting_app/widgets/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -23,21 +22,9 @@ class _CreatePossibleMeetingScreenState
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _participantsController = TextEditingController();
 
-  String _generatePassword() {
-    const allowedChars =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const passwordLength = 4;
-    final random = Random(DateTime.now().millisecondsSinceEpoch);
-    final password = List.generate(passwordLength, (index) {
-      int randIndex = random.nextInt(allowedChars.length);
-      return allowedChars[randIndex];
-    }).join();
-    return password;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final possibleMeetingData = Provider.of<MeetingData>(context);
+    final possibleMeetingData = Provider.of<PossibleMeetingData>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +50,9 @@ class _CreatePossibleMeetingScreenState
                   return;
                 }
 
-                String password = _generatePassword();
+                _formKey.currentState!.save();
+
+                String password = Utils.generatePassword();
                 possibleMeetingData.setMMeetingEnteringPassword(password);
 
                 showDialog(
@@ -141,7 +130,6 @@ class _CreatePossibleMeetingScreenState
                         ElevatedButton(
                           child: const Text('tamam'),
                           onPressed: () {
-                            _formKey.currentState!.save();
                             Navigator.of(context).pop();
                           },
                         ),
@@ -367,6 +355,7 @@ class _CreatePossibleMeetingScreenState
                                         if (pickedTime == null) {
                                           return;
                                         }
+
                                         setState(() {
                                           final dateTime = DateTime(
                                             pickedDate.year,
@@ -375,6 +364,18 @@ class _CreatePossibleMeetingScreenState
                                             pickedTime.hour,
                                             pickedTime.minute,
                                           );
+                                          if (possibleMeetingData
+                                              .possibleMeetingDates
+                                              .contains(dateTime)) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content:
+                                                    Text('Bu Tarih zaten ekli'),
+                                              ),
+                                            );
+                                            return;
+                                          }
                                           possibleMeetingData
                                               .addPossibleMeetingDate(dateTime);
                                         });

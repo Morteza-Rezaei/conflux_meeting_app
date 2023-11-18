@@ -16,9 +16,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => MeetingData()),
+        ChangeNotifierProvider(create: (context) => PossibleMeetingData()),
         ChangeNotifierProvider(create: (context) => UsernameProvider()),
-        ChangeNotifierProvider(create: (context) => UserMeetingDatesProvider())
+        ChangeNotifierProvider(create: (context) => UserMeetingDatesProvider()),
+        ChangeNotifierProvider(create: (context) => NewMeetingData()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

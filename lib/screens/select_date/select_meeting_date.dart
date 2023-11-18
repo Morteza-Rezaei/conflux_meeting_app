@@ -1,4 +1,5 @@
 import 'package:conflux_meeting_app/provider.dart';
+import 'package:conflux_meeting_app/screens/select_date/see_selected_date.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -25,7 +26,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
   void initState() {
     super.initState();
     final possibleMeetingData =
-        Provider.of<MeetingData>(context, listen: false);
+        Provider.of<PossibleMeetingData>(context, listen: false);
     _selectedDates = List.filled(
       possibleMeetingData.possibleMeetingDates.length,
       false,
@@ -34,7 +35,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final possibleMeetingData = Provider.of<MeetingData>(context);
+    final possibleMeetingData = Provider.of<PossibleMeetingData>(context);
     final username = Provider.of<UsernameProvider>(context);
     final userMeetingDates = Provider.of<UserMeetingDatesProvider>(context);
 
@@ -73,6 +74,12 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                 }
 
                 userMeetingDates.addDates(username.username, dates);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SeeSelectedDateScreen()),
+                );
               },
               icon: const Icon(Icons.send_rounded),
             ),
