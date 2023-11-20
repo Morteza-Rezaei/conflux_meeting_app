@@ -189,6 +189,30 @@ class _CreatePossibleMeetingScreenState
 
                 const SizedBox(height: 15),
 
+                // toplantı süresi ekle
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: myInputDecoration('Toplantı süresi (dakika)'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Lütfen toplantı süresini giriniz';
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Lütfen geçerli bir sayı giriniz';
+                      }
+                      return null;
+                    },
+                    onSaved: (newValue) {
+                      possibleMeetingData
+                          .setMeetingDurationMinutes(int.parse(newValue!));
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
