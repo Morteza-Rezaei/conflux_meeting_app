@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/widgets/styles.dart';
 import 'package:conflux_meeting_app/widgets/text_and_textfields.dart';
@@ -5,6 +7,8 @@ import 'package:conflux_meeting_app/widgets/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'package:http/http.dart' as http;
 
 class CreatePossibleMeetingScreen extends StatefulWidget {
   const CreatePossibleMeetingScreen({super.key});
@@ -56,89 +60,119 @@ class _CreatePossibleMeetingScreenState
                 possibleMeetingData.setMMeetingEnteringPassword(password);
 
                 showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      contentPadding: const EdgeInsets.all(10),
-                      title: const Text('Toplantı oluşturulacak'),
-                      content: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer
-                                    .withOpacity(1),
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        contentPadding: const EdgeInsets.all(10),
+                        title: const Text('Toplantı oluşturulacak'),
+                        content: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer
+                                      .withOpacity(1),
+                                ),
+                                child: ConfirmationMeetingRow(
+                                  icon: Icons.event_rounded,
+                                  title: 'Başlık:  ',
+                                  text: possibleMeetingData.mTitle,
+                                ),
                               ),
-                              child: ConfirmationMeetingRow(
-                                icon: Icons.event_rounded,
-                                title: 'Başlık:  ',
-                                text: possibleMeetingData.mTitle,
+                              const SizedBox(height: 10),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer
+                                      .withOpacity(1),
+                                ),
+                                child: ConfirmationMeetingRow(
+                                  icon: Icons.description_rounded,
+                                  title: 'Açıklama:  ',
+                                  text: possibleMeetingData.mDescription,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer
-                                    .withOpacity(1),
+                              const SizedBox(height: 10),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer
+                                      .withOpacity(1),
+                                ),
+                                child: ConfirmationMeetingRow(
+                                  icon: Icons.key_rounded,
+                                  title: 'Şifre:  ',
+                                  text: possibleMeetingData
+                                      .mMeetingEnteringPassword,
+                                ),
                               ),
-                              child: ConfirmationMeetingRow(
-                                icon: Icons.description_rounded,
-                                title: 'Açıklama:  ',
-                                text: possibleMeetingData.mDescription,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer
-                                    .withOpacity(1),
-                              ),
-                              child: ConfirmationMeetingRow(
-                                icon: Icons.key_rounded,
-                                title: 'Şifre:  ',
-                                text: possibleMeetingData
-                                    .mMeetingEnteringPassword,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      actions: [
-                        ElevatedButton(
-                          child: const Text('iptal'),
-                          onPressed: () {
-                            possibleMeetingData.clear();
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        ElevatedButton(
-                          child: const Text('tamam'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                ).then((_) {
-                  Navigator.of(context).pop();
-                });
+                        actions: [
+                          ElevatedButton(
+                            child: const Text('iptal'),
+                            onPressed: () {
+                              _formKey.currentState!.reset();
+                              possibleMeetingData.clear();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          ElevatedButton(
+                            child: const Text('tamam'),
+                            onPressed: () async {
+                              //Navigator.of(context).pop();
+                              _formKey.currentState!.save();
+                              final url = Uri.https(
+                                  'conflux-meeting-app-default-rtdb.firebaseio.com',
+                                  'possible-meetings.json');
+                              var response = await http.post(
+                                url,
+                                headers: {'Content-Type': 'application/json'},
+                                body: json.encode({
+                                  'mTitle': possibleMeetingData.mTitle,
+                                  'mDescription':
+                                      possibleMeetingData.mDescription,
+                                  'mMeetingEnteringPassword':
+                                      possibleMeetingData
+                                          .mMeetingEnteringPassword,
+                                  'meetingDurationMinutes': possibleMeetingData
+                                      .meetingDurationMinutes,
+                                  'participants':
+                                      possibleMeetingData.participants.toList(),
+                                  'possibleMeetingDates': possibleMeetingData
+                                      .possibleMeetingDates
+                                      .map((e) => e.toIso8601String())
+                                      .toList(),
+                                }),
+                              );
+                              if (response.statusCode == 200) {
+                                // Request successful, handle the response if needed.
+                              } else {
+                                // Request failed, handle the error.
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    });
+                // ).then((_) {
+                //   Navigator.of(context).pop();
+                // });
               },
               icon: const Icon(Icons.send_rounded),
             ),
