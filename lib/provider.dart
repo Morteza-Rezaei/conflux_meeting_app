@@ -1,4 +1,8 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PossibleMeetingData extends ChangeNotifier {
   List<String> _participants = [];
@@ -131,15 +135,35 @@ class UsernameProvider extends ChangeNotifier {
 class UserMeetingDatesProvider extends ChangeNotifier {
   Map<String, List<DateTime>> _userDates = {};
 
-  Map<String, List<DateTime>> get userDates => _userDates;
+  Future<Map<String, List<DateTime>>> fetchUserDates() async {
+    final url = Uri.https('conflux-meeting-app-default-rtdb.firebaseio.com',
+        'users-selected-dates.json');
+    final response = await http.get(url);
+    final userDatesData = json.decode(response.body) as Map<String, dynamic>;
+    return userDatesData.map((username, datesData) {
+      List<DateTime> dates =
+          (datesData as List).map((date) => DateTime.parse(date)).toList();
+      return MapEntry(username, dates);
+    });
+  }
 
-  void addDates(String username, List<DateTime> dates) {
+  Future<void> addDates(String username, List<DateTime> dates) async {
     if (!_userDates.containsKey(username)) {
       _userDates[username] = [];
     } else {
       _userDates[username]!.clear();
     }
-    _userDates[username]!.addAll(dates);
+    final url = Uri.https('conflux-meeting-app-default-rtdb.firebaseio.com',
+        'users-selected-dates/$username.json');
+    final response = await http.put(url,
+        body:
+            json.encode(dates.map((date) => date.toIso8601String()).toList()));
+    //_userDates[username]!.addAll(dates);
+    if (response.statusCode >= 400) {
+      throw Exception('Failed to save dates');
+    }
     notifyListeners();
   }
+
+  Map<String, List<DateTime>> get userDates => _userDates;
 }

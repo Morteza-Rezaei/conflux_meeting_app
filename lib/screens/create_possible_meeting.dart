@@ -135,31 +135,50 @@ class _CreatePossibleMeetingScreenState
                           ElevatedButton(
                             child: const Text('tamam'),
                             onPressed: () async {
-                              //Navigator.of(context).pop();
                               _formKey.currentState!.save();
                               final url = Uri.https(
                                   'conflux-meeting-app-default-rtdb.firebaseio.com',
                                   'possible-meetings.json');
-                              var response = await http.post(
-                                url,
-                                headers: {'Content-Type': 'application/json'},
-                                body: json.encode({
-                                  'mTitle': possibleMeetingData.mTitle,
-                                  'mDescription':
-                                      possibleMeetingData.mDescription,
-                                  'mMeetingEnteringPassword':
-                                      possibleMeetingData
-                                          .mMeetingEnteringPassword,
-                                  'meetingDurationMinutes': possibleMeetingData
-                                      .meetingDurationMinutes,
-                                  'participants':
-                                      possibleMeetingData.participants.toList(),
-                                  'possibleMeetingDates': possibleMeetingData
-                                      .possibleMeetingDates
-                                      .map((e) => e.toIso8601String())
-                                      .toList(),
-                                }),
-                              );
+
+                              // Check if the meeting data already exists
+                              var checkResponse = await http.get(url);
+                              var existingData =
+                                  json.decode(checkResponse.body);
+
+                              // Prepare the data to be sent
+                              var data = json.encode({
+                                'mTitle': possibleMeetingData.mTitle,
+                                'mDescription':
+                                    possibleMeetingData.mDescription,
+                                'mMeetingEnteringPassword': possibleMeetingData
+                                    .mMeetingEnteringPassword,
+                                'meetingDurationMinutes':
+                                    possibleMeetingData.meetingDurationMinutes,
+                                'participants':
+                                    possibleMeetingData.participants.toList(),
+                                'possibleMeetingDates': possibleMeetingData
+                                    .possibleMeetingDates
+                                    .map((e) => e.toIso8601String())
+                                    .toList(),
+                              });
+
+                              var response;
+                              if (existingData != null) {
+                                // If the meeting data exists, make a PUT request to update it
+                                response = await http.put(
+                                  url,
+                                  headers: {'Content-Type': 'application/json'},
+                                  body: data,
+                                );
+                              } else {
+                                // If the meeting data doesn't exist, make a POST request to create it
+                                response = await http.post(
+                                  url,
+                                  headers: {'Content-Type': 'application/json'},
+                                  body: data,
+                                );
+                              }
+
                               if (response.statusCode == 200) {
                                 // Request successful, handle the response if needed.
                               } else {
