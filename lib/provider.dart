@@ -165,5 +165,16 @@ class UserMeetingDatesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> resetUsersSelectedDateData() async {
+    _userDates.clear();
+    final url = Uri.https('conflux-meeting-app-default-rtdb.firebaseio.com',
+        'users-selected-dates.json');
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      throw Exception('Failed to reset dates');
+    }
+    notifyListeners();
+  }
+
   Map<String, List<DateTime>> get userDates => _userDates;
 }

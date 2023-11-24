@@ -127,7 +127,6 @@ class _CreatePossibleMeetingScreenState
                           ElevatedButton(
                             child: const Text('iptal'),
                             onPressed: () {
-                              _formKey.currentState!.reset();
                               possibleMeetingData.clear();
                               Navigator.of(context).pop();
                             },
@@ -135,7 +134,6 @@ class _CreatePossibleMeetingScreenState
                           ElevatedButton(
                             child: const Text('tamam'),
                             onPressed: () async {
-                              _formKey.currentState!.save();
                               final url = Uri.https(
                                   'conflux-meeting-app-default-rtdb.firebaseio.com',
                                   'possible-meetings.json');
@@ -184,14 +182,20 @@ class _CreatePossibleMeetingScreenState
                               } else {
                                 // Request failed, handle the error.
                               }
+                              possibleMeetingData.clear();
+
+                              await Provider.of<UserMeetingDatesProvider>(
+                                      context,
+                                      listen: false)
+                                  .resetUsersSelectedDateData();
+                              Navigator.of(context).pop();
                             },
                           ),
                         ],
                       );
-                    });
-                // ).then((_) {
-                //   Navigator.of(context).pop();
-                // });
+                    }).then((_) {
+                  Navigator.of(context).pop();
+                });
               },
               icon: const Icon(Icons.send_rounded),
             ),

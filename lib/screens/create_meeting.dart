@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 class CreateMeetingScreen extends StatefulWidget {
   const CreateMeetingScreen({super.key});
 
@@ -128,7 +131,54 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                         ),
                         ElevatedButton(
                           child: const Text('tamam'),
-                          onPressed: () {
+                          onPressed: () async {
+                            final url = Uri.https(
+                                'conflux-meeting-app-default-rtdb.firebaseio.com',
+                                'new-meeting.json');
+
+                            // Check if the meeting data already exists
+                            var checkResponse = await http.get(url);
+                            var existingData = json.decode(checkResponse.body);
+
+                            // Prepare the data to be sent
+                            var data = json.encode({
+                              'mTitle': newMeetingData.mTitle,
+                              'mDescription': newMeetingData.mDescription,
+                              'mMeetingEnteringPassword':
+                                  newMeetingData.mMeetingEnteringPassword,
+                              'meetingDurationMinutes':
+                                  newMeetingData.meetingDurationMinutes,
+                              'participants':
+                                  newMeetingData.participants.toList(),
+                              'possibleMeetingDates':
+                                  newMeetingData.meetingDate!.toIso8601String(),
+                            });
+
+                            var response;
+                            if (existingData != null) {
+                              // If the meeting data exists, make a PUT request to update it
+                              response = await http.put(
+                                url,
+                                headers: {'Content-Type': 'application/json'},
+                                body: data,
+                              );
+                            } else {
+                              // If the meeting data doesn't exist, make a POST request to create it
+                              response = await http.post(
+                                url,
+                                headers: {'Content-Type': 'application/json'},
+                                body: data,
+                              );
+                            }
+
+                            if (response.statusCode == 200) {
+                              // Request successful, handle the response if needed.
+                            } else {
+                              // Request failed, handle the error.
+                            }
+
+                            newMeetingData.clear();
+
                             Navigator.of(context).pop();
                           },
                         ),
