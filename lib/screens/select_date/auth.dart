@@ -7,12 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class AuthScreen extends StatelessWidget {
+class SelectDateAuthScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  AuthScreen({super.key});
+  SelectDateAuthScreen({super.key});
 
   Future<Map<String, dynamic>> fetchMeetingData() async {
     final url = Uri.https('conflux-meeting-app-default-rtdb.firebaseio.com',
@@ -90,21 +90,12 @@ class AuthScreen extends StatelessWidget {
                                     listen: false)
                                 .setUsername(_usernameController.text);
 
-                            final username = Provider.of<UsernameProvider>(
-                                    context,
-                                    listen: false)
-                                .username;
-
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const SelectSectionScreen(),
                               ),
                             );
-
-                            debugPrint('username: $username');
-                            debugPrint(participants.toString());
-                            debugPrint(password);
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(

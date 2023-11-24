@@ -150,7 +150,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                                   newMeetingData.meetingDurationMinutes,
                               'participants':
                                   newMeetingData.participants.toList(),
-                              'possibleMeetingDates':
+                              'MeetingDate':
                                   newMeetingData.meetingDate!.toIso8601String(),
                             });
 
