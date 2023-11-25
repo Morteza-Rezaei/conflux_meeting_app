@@ -1,12 +1,9 @@
-import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/screens/view_new_meeting/view_new_meeting.dart';
 import 'package:conflux_meeting_app/widgets/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'package:provider/provider.dart';
 
 class ViewNewMeetingAuthScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();

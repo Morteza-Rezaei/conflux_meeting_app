@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:conflux_meeting_app/provider.dart';
@@ -160,6 +162,7 @@ class _CreatePossibleMeetingScreenState
                                     .toList(),
                               });
 
+                              // ignore: prefer_typing_uninitialized_variables
                               var response;
                               if (existingData != null) {
                                 // If the meeting data exists, make a PUT request to update it

@@ -154,6 +154,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                                   newMeetingData.meetingDate!.toIso8601String(),
                             });
 
+                            // ignore: prefer_typing_uninitialized_variables
                             var response;
                             if (existingData != null) {
                               // If the meeting data exists, make a PUT request to update it
@@ -179,6 +180,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
 
                             newMeetingData.clear();
 
+                            // ignore: use_build_context_synchronously
                             Navigator.of(context).pop();
                           },
                         ),

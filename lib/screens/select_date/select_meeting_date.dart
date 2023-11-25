@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/screens/select_date/see_selected_date.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +10,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class SelectMeetingDateScreen extends StatefulWidget {
-  const SelectMeetingDateScreen({
-    super.key,
-  });
+  const SelectMeetingDateScreen({super.key});
 
   @override
   State<SelectMeetingDateScreen> createState() =>
@@ -61,6 +61,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
           var meetingData = snapshot.data;
           var participants = meetingData?['participants'];
           var possibleMeetingDates = meetingData?['possibleMeetingDates'];
+          var meetingDurationMinutes = meetingData?['meetingDurationMinutes'];
 
           return Scaffold(
             appBar: AppBar(
@@ -151,6 +152,43 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                                   fontWeight: FontWeight.w500,
                                   color: Colors.grey[600],
                                 ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    // toplantı süresi
+
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondaryContainer
+                            .withOpacity(0.2),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Toplantı süresi (dakika): ',
+                            style: GoogleFonts.montserrat(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              meetingDurationMinutes.toString(),
+                              style: GoogleFonts.montserrat(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
