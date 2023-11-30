@@ -213,7 +213,8 @@ class _CreatePossibleMeetingScreenState
             child: Column(
               children: [
                 const SizedBox(height: 15),
-                // toplanı başlığı
+
+                // meeting title
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextFormField(
@@ -232,7 +233,7 @@ class _CreatePossibleMeetingScreenState
 
                 const SizedBox(height: 15),
 
-                // toplantı açıklaması
+                // meeting description
                 TextFormField(
                   maxLines: 4,
                   decoration: myInputDecoration('Toplantı açıklaması'),
@@ -249,7 +250,7 @@ class _CreatePossibleMeetingScreenState
 
                 const SizedBox(height: 15),
 
-                // toplantı süresi ekle
+                // meeting duration
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextFormField(
@@ -276,7 +277,7 @@ class _CreatePossibleMeetingScreenState
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Katılımcılar
+                    // participants
                     Expanded(
                       child: Column(
                         children: [
@@ -413,7 +414,8 @@ class _CreatePossibleMeetingScreenState
                       ),
                     ),
                     const SizedBox(width: 15),
-                    // Tarhiler
+
+                    // possible meeting dates
                     Expanded(
                       child: Column(
                         children: [

@@ -60,7 +60,7 @@ class _ViewNewMeetingScreenState extends State<ViewNewMeetingScreen> {
                         ),
                         child: Column(
                           children: [
-                            // olası toplantı başlığı
+                            // created meeting title
                             Text(
                               meetingData?['mTitle'] ?? '',
                               style: GoogleFonts.montserrat(
@@ -71,7 +71,7 @@ class _ViewNewMeetingScreenState extends State<ViewNewMeetingScreen> {
 
                             const SizedBox(height: 10),
 
-                            // oluşan topalantı açıklaması
+                            // created meeting description
 
                             SizedBox(
                               height: 80,
@@ -92,7 +92,7 @@ class _ViewNewMeetingScreenState extends State<ViewNewMeetingScreen> {
 
                       const SizedBox(height: 10),
 
-                      // toplantı süresi
+                      // meeting duration
 
                       Container(
                         width: double.infinity,
@@ -129,7 +129,7 @@ class _ViewNewMeetingScreenState extends State<ViewNewMeetingScreen> {
 
                       const SizedBox(height: 10),
 
-                      // katılımcılar
+                      // participants
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(
@@ -166,7 +166,7 @@ class _ViewNewMeetingScreenState extends State<ViewNewMeetingScreen> {
 
                       const SizedBox(height: 10),
 
-                      // toplantı tarihi
+                      // meeting date
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(
@@ -201,7 +201,7 @@ class _ViewNewMeetingScreenState extends State<ViewNewMeetingScreen> {
                         ),
                       ),
 
-                      // google takvimine ekle butonu
+                      // add to calendar button
 
                       const SizedBox(height: 20),
                       SizedBox(

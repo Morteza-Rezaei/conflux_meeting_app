@@ -67,7 +67,6 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
             appBar: AppBar(
               title: const Text('Olası toplantı bilgileri'),
               actions: [
-                // kaudet buttonu
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: IconButton(
@@ -129,7 +128,6 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                       ),
                       child: Column(
                         children: [
-                          // olası toplantı başlığı
                           Text(
                             meetingData?['mTitle'] ?? '',
                             style: GoogleFonts.montserrat(
@@ -137,11 +135,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-
                           const SizedBox(height: 10),
-
-                          // oluşan topalantı açıklaması
-
                           SizedBox(
                             height: 80,
                             child: SingleChildScrollView(
@@ -158,11 +152,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
-                    // toplantı süresi
-
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
@@ -195,10 +185,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
-                    // katılımcılar
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
@@ -232,9 +219,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
@@ -257,9 +242,9 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 10),
-                          // lütfen size uygun olan tarihleri seçiniz yazısı
                           for (var meeting in possibleMeetingDates)
                             CheckboxListTile(
+                              dense: true,
                               title: Text(dateFormatter
                                   .format(DateTime.parse(meeting))),
                               subtitle: Text(timeFormatter
@@ -276,10 +261,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 30),
-
-                    // veya müsaitseniz tarih seçiniz yazısı
                     ElevatedButton.icon(
                       onPressed: () {
                         showDatePicker(
@@ -314,9 +296,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
                       icon: const Icon(Icons.calendar_today),
                       label: const Text('Veya uygun tarih seçiniz'),
                     ),
-
                     const SizedBox(height: 10),
-
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(

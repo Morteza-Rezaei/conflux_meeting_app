@@ -48,6 +48,7 @@ class SelectDateAuthScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // informative text
                     Text(
                       'Katılımcı adı ve toplantı parolasını giriniz',
                       style: GoogleFonts.montserrat(
@@ -57,6 +58,8 @@ class SelectDateAuthScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
+
+                    // username input
                     TextFormField(
                       controller: _usernameController,
                       decoration: myInputDecoration('Katılımcı Adı'),
@@ -68,6 +71,8 @@ class SelectDateAuthScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 10),
+
+                    // password input
                     TextFormField(
                       controller: _passwordController,
                       decoration: myInputDecoration('Toplantı Parolası'),
@@ -80,12 +85,14 @@ class SelectDateAuthScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 15),
+
+                    // submit button
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           if (participants.contains(_usernameController.text) &&
                               password == _passwordController.text) {
-                            // kullanıcı adını kaydetme
+                            // save username to provider
                             Provider.of<UsernameProvider>(context,
                                     listen: false)
                                 .setUsername(_usernameController.text);

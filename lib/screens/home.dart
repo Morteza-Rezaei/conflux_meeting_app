@@ -9,7 +9,6 @@ import 'package:google_fonts/google_fonts.dart';
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +39,7 @@ class Home extends StatelessWidget {
 
               const SizedBox(height: 30),
 
+              // Buttons
               MyHomeElevatedButton(
                   onPressed: () {
                     Navigator.push(
