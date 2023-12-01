@@ -1,6 +1,7 @@
 import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'color_schemes.g.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => NewMeetingData()),
       ],
       child: MaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('tr', 'TR'),
+        ],
         debugShowCheckedModeBanner: false,
         theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
         home: const Home(),
