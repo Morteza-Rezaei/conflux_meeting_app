@@ -1,3 +1,4 @@
+import 'package:conflux_meeting_app/screens/splash.dart';
 import 'package:conflux_meeting_app/screens/view_new_meeting/view_new_meeting.dart';
 import 'package:conflux_meeting_app/widgets/styles.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class ViewNewMeetingAuthScreen extends StatelessWidget {
       future: fetchMeetingData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const SplashScreen();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
@@ -43,64 +44,75 @@ class ViewNewMeetingAuthScreen extends StatelessWidget {
               key: _formKey,
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Katılımcı adı ve toplantı parolasını giriniz',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 80),
+                        child: Image.asset(
+                          'assets/conflux_logo2.png',
+                          fit: BoxFit.contain,
+                          width: 200,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _usernameController,
-                      decoration: myInputDecoration('Katılımcı Adı'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Lutfen kullanici adınızı giriniz';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: myInputDecoration('Toplantı Parolası'),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Lutfen toplantı parolasını giriniz';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          if (participants.contains(_usernameController.text) &&
-                              password == _passwordController.text) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ViewNewMeetingScreen(),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      'Katılımcı adı veya parola hatalı!')),
-                            );
+                      Text(
+                        'Katılımcı adı ve toplantı parolasını giriniz',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _usernameController,
+                        decoration: myInputDecoration('Katılımcı Adı'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Lutfen kullanici adınızı giriniz';
                           }
-                        }
-                      },
-                      child: const Text('Submit'),
-                    ),
-                  ],
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: myInputDecoration('Toplantı Parolası'),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Lutfen toplantı parolasını giriniz';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            if (participants
+                                    .contains(_usernameController.text) &&
+                                password == _passwordController.text) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ViewNewMeetingScreen(),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Katılımcı adı veya parola hatalı!')),
+                              );
+                            }
+                          }
+                        },
+                        child: const Text('Submit'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

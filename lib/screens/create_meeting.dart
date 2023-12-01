@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:table_calendar/table_calendar.dart';
+
 class CreateMeetingScreen extends StatefulWidget {
   const CreateMeetingScreen({super.key});
 
@@ -196,15 +198,14 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 15),
-
                 // meeting title
+                const SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextFormField(
@@ -221,7 +222,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 15),
+                const SizedBox(height: 8),
 
                 // meeting description
                 TextFormField(
@@ -238,7 +239,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                   },
                 ),
 
-                const SizedBox(height: 15),
+                const SizedBox(height: 8),
 
                 // meeting duration
                 Padding(
@@ -262,250 +263,248 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 15),
+                const SizedBox(height: 10),
 
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // participants
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text('Katılımcı Ekle'),
-                                          content: TextField(
-                                            controller: _participantsController,
-                                            decoration: const InputDecoration(
-                                              labelText: 'Katılımcı adı',
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('İptal'),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: const Text('Ekle'),
-                                              onPressed: () {
-                                                if (_participantsController
-                                                    .text.isEmpty) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    const SnackBar(
-                                                      content: Text(
-                                                          'Lütfen katılımcı adını giriniz'),
-                                                    ),
-                                                  );
-                                                }
-                                                if (newMeetingData.participants
-                                                    .contains(
-                                                        _participantsController
-                                                            .text)) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    const SnackBar(
-                                                      content: Text(
-                                                          'Bu katılımcı zaten ekli'),
-                                                    ),
-                                                  );
-                                                  return;
-                                                }
-                                                if (_participantsController
-                                                    .text.isNotEmpty) {
-                                                  setState(() {
-                                                    newMeetingData.addParticipant(
-                                                        _participantsController
-                                                            .text);
-                                                    _participantsController
-                                                        .clear();
-                                                  });
-                                                }
+                TableCalendar(
+                  locale: 'tr_TR',
+                  startingDayOfWeek: StartingDayOfWeek.monday,
+                  calendarStyle: CalendarStyle(
+                    selectedDecoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.tertiaryContainer,
+                      shape: BoxShape.circle,
+                    ),
+                    selectedTextStyle: const TextStyle(
+                      color: Colors.white,
+                    ),
+                    todayDecoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      shape: BoxShape.circle,
+                    ),
+                    todayTextStyle: const TextStyle(
+                      color: Colors.white,
+                    ),
+                    weekendTextStyle: const TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                  calendarFormat: CalendarFormat.twoWeeks,
+                  firstDay: DateTime.now(),
+                  lastDay: DateTime.now().add(const Duration(days: 365)),
+                  focusedDay: DateTime.now(),
+                  selectedDayPredicate: (day) {
+                    return newMeetingData.meetingDate != null &&
+                        isSameDay(newMeetingData.meetingDate!, day);
+                  },
+                  eventLoader: (day) {
+                    return newMeetingData.meetingDate != null &&
+                            isSameDay(newMeetingData.meetingDate!, day)
+                        ? [day]
+                        : [];
+                  },
+                  onDaySelected: (selectedDay, focusedDay) {
+                    showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    ).then(
+                      (pickedTime) {
+                        if (pickedTime == null) {
+                          return;
+                        }
 
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.person_add,
-                                    size: 20,
-                                  ),
-                                  label: const Text(
-                                    'Katılımcı ekle',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                        setState(() {
+                          final dateTime = DateTime(
+                            selectedDay.year,
+                            selectedDay.month,
+                            selectedDay.day,
+                            pickedTime.hour,
+                            pickedTime.minute,
+                          );
+
+                          newMeetingData.setMeetingDate(dateTime);
+                        });
+                      },
+                    );
+                  },
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Text(
+                    'Seçilen tarih :',
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ),
+
+                Container(
+                  height: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondaryContainer
+                        .withOpacity(0.2),
+                  ),
+                  child: newMeetingData.meetingDate == null
+                      ? const Center(child: Text('Lütfen bir tarih seçiniz'))
+                      : Container(
+                          margin: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
                           ),
-                          const SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer
-                                  .withOpacity(0.2),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.only(
+                              left: 10,
+                              right: 0,
+                              top: 0,
+                              bottom: 0,
                             ),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: newMeetingData.participants.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primaryContainer),
-                                  child: ListTile(
-                                    dense: true,
-                                    contentPadding: const EdgeInsets.only(
-                                      left: 10,
-                                      right: 0,
-                                      top: 0,
-                                      bottom: 0,
-                                    ),
-                                    title: Text(
-                                        newMeetingData.participants[index]),
-                                    trailing: IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: () {
-                                        setState(() {
-                                          newMeetingData.participants
-                                              .removeAt(index);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                );
+                            dense: true,
+                            title: Text(dateFormatter
+                                .format(newMeetingData.meetingDate!)),
+                            subtitle: Text(timeFormatter
+                                .format(newMeetingData.meetingDate!)),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                setState(() {
+                                  newMeetingData.setMeetingDate(null);
+                                });
                               },
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-
-                    // meeting date
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime.now(),
-                                      lastDate:
-                                          DateTime(DateTime.now().year, 12, 31),
-                                    ).then((pickedDate) {
-                                      if (pickedDate == null) {
-                                        return;
-                                      }
-                                      showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-                                      ).then((pickedTime) {
-                                        if (pickedTime == null) {
-                                          return;
-                                        }
-                                        setState(() {
-                                          final dateTime = DateTime(
-                                            pickedDate.year,
-                                            pickedDate.month,
-                                            pickedDate.day,
-                                            pickedTime.hour,
-                                            pickedTime.minute,
-                                          );
-
-                                          newMeetingData
-                                              .setMeetingDate(dateTime);
-                                        });
-                                      });
-                                    });
-                                  },
-                                  icon: const Icon(
-                                    Icons.calendar_today,
-                                    size: 20,
-                                  ),
-                                  label: const Text(
-                                    'Tarhi ekle',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          newMeetingData.meetingDate != null
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer
-                                        .withOpacity(0.2),
-                                  ),
-                                  child: Container(
-                                    margin: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primaryContainer,
-                                    ),
-                                    child: ListTile(
-                                      contentPadding: const EdgeInsets.only(
-                                        left: 10,
-                                        right: 0,
-                                        top: 0,
-                                        bottom: 0,
-                                      ),
-                                      dense: true,
-                                      title: Text(dateFormatter
-                                          .format(newMeetingData.meetingDate!)),
-                                      subtitle: Text(timeFormatter
-                                          .format(newMeetingData.meetingDate!)),
-                                      trailing: IconButton(
-                                        icon: const Icon(Icons.delete),
-                                        onPressed: () {
-                                          setState(() {
-                                            newMeetingData.setMeetingDate(null);
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 8),
+
+                TextButton.icon(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Katılımcı Ekle'),
+                          content: TextField(
+                            controller: _participantsController,
+                            decoration: const InputDecoration(
+                              labelText: 'Katılımcı adı',
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              child: const Text('İptal'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text('Ekle'),
+                              onPressed: () {
+                                if (_participantsController.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Lütfen katılımcı adını giriniz'),
+                                    ),
+                                  );
+                                }
+                                if (newMeetingData.participants
+                                    .contains(_participantsController.text)) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Bu katılımcı zaten ekli'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if (_participantsController.text.isNotEmpty) {
+                                  setState(() {
+                                    newMeetingData.addParticipant(
+                                        _participantsController.text);
+                                    _participantsController.clear();
+                                  });
+                                }
+
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.person_add,
+                    size: 20,
+                  ),
+                  label: const Text(
+                    'Katılımcı ekle',
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                Container(
+                  height: 70,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondaryContainer
+                        .withOpacity(0.2),
+                  ),
+                  child: newMeetingData.participants.isEmpty
+                      ? const Center(
+                          child: Text(
+                          'Lütfen en az bir katılımcı ekleyiniz',
+                        ))
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: newMeetingData.participants.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: 190,
+                              margin: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer),
+                              child: ListTile(
+                                dense: true,
+                                contentPadding: const EdgeInsets.only(
+                                  left: 10,
+                                  right: 0,
+                                  top: 0,
+                                  bottom: 0,
+                                ),
+                                title: Text(
+                                  newMeetingData.participants[index],
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () {
+                                    setState(() {
+                                      newMeetingData.participants
+                                          .removeAt(index);
+                                    });
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                ),
+
+                const SizedBox(height: 10),
               ],
             ),
           ),

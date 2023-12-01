@@ -1,8 +1,10 @@
 import 'package:conflux_meeting_app/provider.dart';
+import 'package:conflux_meeting_app/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class SeeSelectedDateScreen extends StatelessWidget {
   const SeeSelectedDateScreen({super.key});
@@ -21,7 +23,7 @@ class SeeSelectedDateScreen extends StatelessWidget {
         future: userMeetingDates.fetchUserDates(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const SplashScreen();
           } else if (snapshot.hasError) {
             return const Center(child: Text('An error occurred!'));
           } else {
@@ -31,6 +33,61 @@ class SeeSelectedDateScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
+                    TableCalendar(
+                      locale: 'tr_TR',
+                      startingDayOfWeek: StartingDayOfWeek.monday,
+                      calendarStyle: CalendarStyle(
+                        selectedDecoration: BoxDecoration(
+                          color:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          shape: BoxShape.circle,
+                        ),
+                        selectedTextStyle: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        todayDecoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          shape: BoxShape.circle,
+                        ),
+                        todayTextStyle: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        weekendTextStyle: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                      calendarFormat: CalendarFormat.twoWeeks,
+                      firstDay: DateTime.now(),
+                      lastDay: DateTime.now().add(const Duration(days: 365)),
+                      focusedDay: DateTime.now(),
+                      selectedDayPredicate: (day) {
+                        // Format the date to yMd format to compare with the same format in allUserDates
+                        String formattedDay =
+                            DateFormat('yyyy-MM-dd').format(day);
+
+                        // Check if the formatted date exists in the allUserDates map
+                        return allUserDates.values
+                            .expand((i) => i)
+                            .map((e) => DateFormat('yyyy-MM-dd').format(e))
+                            .contains(formattedDay);
+                      },
+                      eventLoader: (day) {
+                        // Format the date to yMd format to compare with the same format in allUserDates
+                        String formattedDay =
+                            DateFormat('yyyy-MM-dd').format(day);
+
+                        // Check if the formatted date exists in the allUserDates map
+                        var selectedDates = allUserDates.values
+                            .expand((i) => i)
+                            .where((date) =>
+                                DateFormat('yyyy-MM-dd').format(date) ==
+                                formattedDay)
+                            .toList();
+
+                        return selectedDates;
+                      },
+                    ),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

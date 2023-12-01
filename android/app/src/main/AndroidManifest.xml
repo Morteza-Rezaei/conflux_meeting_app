@@ -10,7 +10,7 @@
         </queries>
         
     <application
-        android:label="conflux_meeting_app"
+        android:label="CONFLUX"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

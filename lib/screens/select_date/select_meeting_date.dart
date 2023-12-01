@@ -2,6 +2,7 @@
 
 import 'package:conflux_meeting_app/provider.dart';
 import 'package:conflux_meeting_app/screens/select_date/see_selected_date.dart';
+import 'package:conflux_meeting_app/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -54,7 +55,7 @@ class _SelectMeetingDateScreenState extends State<SelectMeetingDateScreen> {
       future: fetchMeetingData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const SplashScreen();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {

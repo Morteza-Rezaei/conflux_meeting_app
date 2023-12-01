@@ -207,13 +207,14 @@ class _CreatePossibleMeetingScreenState
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 // meeting title
+                const SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextFormField(
@@ -345,7 +346,7 @@ class _CreatePossibleMeetingScreenState
                 Padding(
                   padding: const EdgeInsets.all(14),
                   child: Text(
-                    'Seçilen tarihler:',
+                    'Seçilen tarihler :',
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ),
@@ -479,7 +480,7 @@ class _CreatePossibleMeetingScreenState
                 const SizedBox(height: 5),
 
                 Container(
-                  height: 60,
+                  height: 70,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     color: Theme.of(context)
@@ -489,14 +490,16 @@ class _CreatePossibleMeetingScreenState
                   ),
                   child: possibleMeetingData.participants.isEmpty
                       ? const Center(
-                          child: Text('Lütfen en az bir katılımcı ekleyiniz'))
+                          child: Text(
+                          'Lütfen en az bir katılımcı ekleyiniz',
+                        ))
                       : ListView.builder(
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           itemCount: possibleMeetingData.participants.length,
                           itemBuilder: (context, index) {
                             return Container(
-                              width: 150,
+                              width: 190,
                               margin: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
@@ -512,7 +515,10 @@ class _CreatePossibleMeetingScreenState
                                   bottom: 0,
                                 ),
                                 title: Text(
-                                    possibleMeetingData.participants[index]),
+                                  possibleMeetingData.participants[index],
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                                 trailing: IconButton(
                                   icon: const Icon(Icons.delete),
                                   onPressed: () {

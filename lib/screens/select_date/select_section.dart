@@ -18,33 +18,43 @@ class SelectSectionScreen extends StatelessWidget {
         title: Text(possibleMeetingData.mTitle),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            MyHomeElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SelectMeetingDateScreen()),
-                );
-              },
-              icon: const Icon(Icons.calendar_today),
-              label: const Text('Size uygun olan tarihleri seçin'),
-            ),
-            const SizedBox(height: 15),
-            MyHomeElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SeeSelectedDateScreen()),
-                );
-              },
-              icon: const Icon(Icons.calendar_today),
-              label: const Text('Seçilen tarihleri göster'),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 80),
+                child: Image.asset(
+                  'assets/conflux_logo2.png',
+                  fit: BoxFit.contain,
+                  width: 200,
+                ),
+              ),
+              MyHomeElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SelectMeetingDateScreen()),
+                  );
+                },
+                icon: const Icon(Icons.calendar_today),
+                label: const Text('Size uygun olan tarihleri seçin'),
+              ),
+              const SizedBox(height: 15),
+              MyHomeElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SeeSelectedDateScreen()),
+                  );
+                },
+                icon: const Icon(Icons.calendar_today),
+                label: const Text('Seçilen tarihleri göster'),
+              ),
+            ],
+          ),
         ),
       ),
     );

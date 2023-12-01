@@ -1,4 +1,5 @@
 import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:conflux_meeting_app/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +30,7 @@ class _ViewNewMeetingScreenState extends State<ViewNewMeetingScreen> {
         future: fetchMeetingData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const SplashScreen();
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
@@ -219,7 +220,7 @@ class _ViewNewMeetingScreenState extends State<ViewNewMeetingScreen> {
                               );
                               Add2Calendar.addEvent2Cal(event);
                             },
-                            label: const Text('Google Takvimine Ekle')),
+                            label: const Text('Takvime Ekle')),
                       ),
                     ],
                   ),
