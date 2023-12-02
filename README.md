@@ -1,16 +1,68 @@
-# conflux_meeting_app
+# Conflux - Toplantı Uygulaması
 
-A new Flutter project.
+## Apk Dosyası ve Uygulamanın Videosu
 
-## Getting Started
+- apk dosyasını [buradan](https://drive.google.com/file/d/1GEXCcpyzEssht1AOcmMy_1aQRmqLmOWI/view?usp=drive_link) indirebilirsiniz.
+- videosunu [buradan](https://www.youtube.com/watch?v=SpAY46ZTj8U) izleyebilirsiniz.
 
-This project is a starting point for a Flutter application.
+## Nasıl Kullanılır
 
-A few resources to get you started if this is your first Flutter project:
+### Olası Toplantı Oluşturma
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. Uygulamaya giriş yapın.
+2. "Olası Toplantı Oluştur" butonuna tıklayın.
+3. Başlık, açıklama, süre (dakika olarak), olası tarihler ve katılımcıları ekleyin.
+4. Bilgileri kaydedin.
+5. Oluşturulan olası toplantı için uygulama bir şifre üretecek, bu şifreyi kopyalayın ve paylaşın.
+<div style="display: flex; flex-wrap: nowrap;">
+  <img src="assets/ss/ss1.png" style="max-width: 150px; width: 45%; margin-right: 10px;" />
+  <img src="assets/ss/ss2.png" style="max-width: 150px; width: 45%;"
+   />
+</div>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Olası Toplantıyı Görüntüleme ve Tarih Seçme
+
+1. "Olası Toplantıyı Görüntüle" butonuna tıklayın."Olası Toplantıyı Görüntüle" butonuna tıklayın.
+2. Katılımcı ismi ve paylaşılan şifreyi girin.
+3. Doğru bilgi girilirse, bir başka ekrana yönlendirilirsiniz.
+4. Bu ekranda, toplantı bilgilerini sayfasını görüntüleyebilir ve uygun tarihleri seçebilirsiniz. veya Diğer kullanıcıların seçtiği tarihleri gösteren sayfaya gidebilirsiniz.
+<div style="display: flex; flex-wrap: nowrap;">
+  <img src="assets/ss/ss3.png" style="max-width: 150px; width: 45%; margin-right: 10px;" />
+  <img src="assets/ss/ss4.png" style="max-width: 150px; width: 45%;"
+   />
+</div>
+<div style="display: flex; flex-wrap: nowrap;">
+  <img src="assets/ss/ss5.png" style="max-width: 150px; width: 45%; margin-right: 10px;" />
+  <img src="assets/ss/ss6.png" style="max-width: 150px; width: 45%;"
+   />
+</div>
+
+### Kesinleşmiş Toplantı Oluşturma
+
+1. "Toplantı Oluştur" butonuna tıklayın.
+2. Başlık, açıklama, süre (dakika olarak), en uygun tarihi ve katılımcıları ekleyin.
+3. Bilgileri kaydedin.
+4. Oluşturulan toplantı için uygulama bir şifre üretecek, bu şifreyi kopyalayın ve paylaşın.
+<div style="display: flex; flex-wrap: nowrap;">
+  <img src="assets/ss/ss7.png" style="max-width: 150px; width: 45%; margin-right: 10px;" />
+  <img src="assets/ss/ss8.png" style="max-width: 150px; width: 45%;"
+   />
+</div>
+
+### Kesinleşmiş Toplantıyı Görüntüleme
+
+1. "Toplantıyı Görüntüle" butonuna tıklayın.
+2. Katılımcı ismi ve paylaşılan şifreyi girin.
+3. Doğru bilgi girilirse, bir başka ekrana yönlendirilirsiniz.
+4. Bu ekranda, toplantı bilgilerini görebilirsiniz.
+5. "Takvime Ekle" butonuna tıklayarak, toplantıyı Takviminize ekleyebilirsiniz.
+<div style="display: flex; flex-wrap: nowrap;">
+  <img src="assets/ss/ss9.png" style="max-width: 150px; width: 45%; margin-right: 10px;" />
+  <img src="assets/ss/ss10.png" style="max-width: 150px; width: 45%;"
+   />
+</div>
+<div style="display: flex; flex-wrap: nowrap;">
+  <img src="assets/ss/ss11.png" style="max-width: 150px; width: 45%; margin-right: 10px;" />
+  <img src="assets/ss/ss12.png" style="max-width: 150px; width: 45%;"
+   />
+</div>
