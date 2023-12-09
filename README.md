@@ -6,6 +6,24 @@
 
 - apk dosyasını [buradan](https://drive.google.com/file/d/1GEXCcpyzEssht1AOcmMy_1aQRmqLmOWI/view?usp=drive_link) indirebilirsiniz.
 - videosunu [buradan](https://www.youtube.com/watch?v=SpAY46ZTj8U) izleyebilirsiniz.
+# Flutter Kurulumu
+
+Bu proje Flutter ile geliştirilmiştir. Projeyi çalıştırmak için aşağıdaki adımları izleyin:
+
+## 1. Flutter SDK'nın İndirilmesi ve Kurulumu
+
+Flutter'ı  işletim sisteminize kurmak için [resmi Flutter websitesini ziyaret edin](https://docs.flutter.dev/get-started/install) ve aşağıdaki adımları izleyin:
+
+- **SDK'nın İndirilmesi**: Flutter SDK'nın en son sürümünü indirin.
+- **ZIP Dosyasının Çıkarılması**: İndirdiğiniz dosyayı bir klasöre çıkarın.
+- **Path Ayarları**: Sistem değişkenlerine Flutter'ın `bin` klasörünü ekleyin.
+
+## 2. Gerekli Paketlerin Yüklenmesi
+
+Proje klasörünüzde terminali açın ve aşağıdaki komutu girin:
+
+```bash
+flutter pub get
 
 ## Nasıl Kullanılır
 
