@@ -24,6 +24,7 @@ Proje klasörünüzde terminali açın ve aşağıdaki komutu girin:
 
 ```bash
 flutter pub get
+```
 
 ## Nasıl Kullanılır
 
